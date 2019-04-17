@@ -26,5 +26,6 @@
     "react"
   ],
   "license": "MIT",
-  "devDependencies": {}
+  "devDependencies": {},
+  "dependencies": {}
 }

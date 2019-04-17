@@ -1,24 +1,17 @@
 import React, { Component } from 'react';
+import 'semantic-ui-css/semantic.min.css'
 import './App.css';
+
+import HeaderBarMenu from './components/header';
+import NoteList from './components/notelist';
 
 class App extends Component {
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
+        <HeaderBarMenu />
+        <NoteList />
+     </div>
     );
   }
 }
