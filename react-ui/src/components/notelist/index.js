@@ -1,25 +1,36 @@
+import { graphql } from "react-apollo";
+import gql from "graphql-tag";
+
 import './index.css';
 
-import {connect} from 'react-redux';
 import React, {Component} from 'react';
 import Note from '../note';
 
 class NoteList extends Component {
   render() {
-    const {notes} = this.props;
+    const {getNotes} = this.props;
+
+    if (getNotes.loading) {
+      return null;
+    }
+
+    console.log(getNotes);
 
     return (
       <div className="note-list">
-        {notes.map(x => <Note note={x} />)}
+        {getNotes.notes.map(x => <Note note={x} />)}
       </div>
     );
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    notes: state.notes.notes
+const GET_NOTES = gql`{ 
+  notes @client {
+    title
+    description
+    createdAt
+    updatedAt
   }
-}
+}`;
 
-export default connect(mapStateToProps)(NoteList);
+export default graphql(GET_NOTES,{name: 'getNotes'})(NoteList);
