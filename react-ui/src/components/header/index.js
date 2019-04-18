@@ -1,11 +1,9 @@
+import {connect} from 'react-redux';
 import React, {Component} from 'react';
 import {Menu, Icon} from 'semantic-ui-react';
+import {notes} from '../../state/actions';
 
 class HeaderBarMenu extends Component {
-  handleItemClick() {
-    console.log('clicked');
-  }
-
   render() {
     return (
       <Menu fixed="top">
@@ -28,4 +26,10 @@ class HeaderBarMenu extends Component {
   }
 }
 
-export default HeaderBarMenu;
+const mapDispatchToProps = (dispatch) => {
+  return {
+    onNewClick: dispatch(notes.add())
+  }
+};
+
+export default connect(null, mapDispatchToProps)(HeaderBarMenu);
