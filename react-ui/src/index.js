@@ -12,9 +12,11 @@ import {InMemoryCache} from 'apollo-boost';
 import resolvers from './clientState/resolvers';
 import initial from './clientState/initial';
 
+const APP_URL = process.env.HEROKU_APP_NAME || 'localhost:3001';
+
 const cache = new InMemoryCache();
 const client = new ApolloClient({
-  uri: 'http://localhost:3001/graphql',
+  uri: `http://${APP_URL}/graphql`,
   cache,
   resolvers,
 });
