@@ -1,12 +1,34 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {Provider} from 'react-redux'
 
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
+import {ApolloProvider} from 'react-apollo';
+import ApolloClient from 'apollo-boost';
+import {InMemoryCache} from 'apollo-boost';
+
+
+import resolvers from './clientState/resolvers';
+import initial from './clientState/initial';
+
+const cache = new InMemoryCache();
+const client = new ApolloClient({
+  uri: 'http://localhost:3001/graphql',
+  cache,
+  resolvers,
+});
+cache.writeData({
+  data: initial
+});
+
+
+
 ReactDOM.render(
-  <App />,
+
+  <ApolloProvider client={client}>
+    <App />
+  </ApolloProvider>,
   document.getElementById('root')
 );
 

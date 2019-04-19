@@ -2,3 +2,8 @@
   display: flex;
 }
 
+.date {
+  float: left;
+  margin-right: 10px;
+}
+

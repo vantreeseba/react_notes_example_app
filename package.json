@@ -1,12 +1,12 @@
 {
-  "name": "daniel_france_app",
+  "name": "example_notes_app",
   "version": "1.0.0",
   "description": "",
   "scripts": {
     "start": "node server",
     "start:ui": "cd react-ui && npm run start",
     "start:server": "cd server && npm run start",
-    "dev:server": "cd server && npm run start:dev",
+    "dev:server": "cd server && docker-compose up",
     "build": "cd react-ui/ && npm install && npm install --only=dev --no-shrinkwrap && npm run build",
     "heroku-postbuild": "cd server && npm install"
   },
@@ -16,5 +16,7 @@
   ],
   "license": "MIT",
   "devDependencies": {},
-  "dependencies": {}
+  "dependencies": {
+    "graphql": "^14.2.1"
+  }
 }

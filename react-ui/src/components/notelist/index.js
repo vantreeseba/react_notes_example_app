@@ -1,10 +1,12 @@
-import { graphql } from "react-apollo";
-import gql from "graphql-tag";
-
 import './index.css';
 
+import {graphql, compose} from "react-apollo";
+import {Card} from 'semantic-ui-react';
 import React, {Component} from 'react';
+
 import Note from '../note';
+import GET_SHOW_ARCHIVED from '../../graphql/getShowArchived';
+import GET_NOTES from '../../graphql/getNotes';
 
 class NoteList extends Component {
   render() {
@@ -17,20 +19,23 @@ class NoteList extends Component {
     console.log(getNotes);
 
     return (
-      <div className="note-list">
-        {getNotes.notes.map(x => <Note note={x} />)}
-      </div>
+      <Card.Group className="note-list">
+        {getNotes.notes.map(x => <Note key={`note-${x._id}`} note={x} />)}
+      </Card.Group>
     );
   }
 }
 
-const GET_NOTES = gql`{ 
-  notes @client {
-    title
-    description
-    createdAt
-    updatedAt
-  }
-}`;
 
-export default graphql(GET_NOTES,{name: 'getNotes'})(NoteList);
+const wrapWithShowArchive = graphql(GET_SHOW_ARCHIVED, {name: 'showArchived'});
+const wrapWithGetNotes = graphql(GET_NOTES, {
+  name: 'getNotes',
+  options: props => {
+    const {showArchived} = props.showArchived;
+    return {
+      variables: {showArchived}
+    }
+  }
+})
+
+export default compose(wrapWithShowArchive, wrapWithGetNotes)(NoteList);

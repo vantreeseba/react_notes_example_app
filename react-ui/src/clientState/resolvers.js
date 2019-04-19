@@ -1,8 +1,13 @@
+// import gql from 'graphql-tag';
+
 export default {
   Mutation: {
-    addNote: (_, {note}, {cache}) => {
-      cache.writeData({data: {note}});
-      return null;
+    toggleShowArchived: (_, {showArchived}, {cache}) => {
+      cache.writeData({
+        data: {
+          showArchived
+        }
+      });
     }
   }
 };
