@@ -17,7 +17,11 @@ db.on('error', (err) => console.error('connection error:', err));
 db.once('open', () => {
   app.use(express.static(path.resolve(__dirname, '../react-ui/build')));
 
-  const server = new ApolloServer({schema});
+  const server = new ApolloServer({
+    schema,
+    introspection: true,
+    playground: true,
+  });
   server.applyMiddleware({app}); // app is from an existing express app
 
   app.listen({port: PORT}, () =>
