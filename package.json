@@ -14,9 +14,5 @@
     "node_modules",
     "react-ui/node_modules"
   ],
-  "license": "MIT",
-  "devDependencies": {},
-  "dependencies": {
-    "graphql": "^14.2.1"
-  }
+  "license": "MIT"
 }
