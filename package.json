@@ -7,8 +7,7 @@
     "start:ui": "cd react-ui && npm run start",
     "start:server": "cd server && npm run start",
     "dev:server": "cd server && docker-compose up",
-    "build": "cd react-ui/ && npm install && npm run build",
-    "heroku-postbuild": "cd server && npm install"
+    "build": "cd react-ui/ && npm install && npm run build"
   },
   "cacheDirectories": [
     "node_modules",
