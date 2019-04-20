@@ -1,7 +1,10 @@
 import {graphql, compose} from "react-apollo";
 import React, {Component} from 'react';
 import {Menu, Icon, Checkbox} from 'semantic-ui-react';
+import {withRouter} from 'react-router-dom';
+
 import EditNoteModal from '../editnotemodal';
+import Auth from '../../services/auth';
 
 import GET_SHOW_ARCHIVED from '../../graphql/getShowArchived';
 import TOGGLE_SHOW_ARCHIVED from '../../graphql/toggleShowArchived';
@@ -36,6 +39,12 @@ class HeaderBarMenu extends Component {
         >
           <Checkbox label="Show Archived" checked={showArchived.showArchived} />
         </Menu.Item>
+        <Menu.Item
+          position="right"
+          onClick={() => Auth.logout(() => this.props.history.replace('/'))}
+        >
+          Logout
+        </Menu.Item>
       </Menu>
     )
   }
@@ -55,5 +64,5 @@ const WrapWithToggleArchive = graphql(TOGGLE_SHOW_ARCHIVED, {
   })
 });
 
-export default compose(wrapWithShowArchive, WrapWithToggleArchive)(HeaderBarMenu);
+export default compose(wrapWithShowArchive, WrapWithToggleArchive, withRouter)(HeaderBarMenu);
 

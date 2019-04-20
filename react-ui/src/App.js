@@ -2,16 +2,28 @@ import 'semantic-ui-css/semantic.min.css'
 import './App.css';
 
 import React, {Component} from 'react';
-import HeaderBarMenu from './components/header';
-import NoteList from './components/notelist';
+import {BrowserRouter as Router, Route, Redirect, withRouter} from 'react-router-dom';
+
+import Auth from './services/auth';
+import Home from './components/home';
+import Login from './components/auth/login';
+import Callback from './components/auth/callback';
 
 class App extends Component {
   render() {
     return (
-      <div className="App">
-        <HeaderBarMenu />
-        <NoteList />
-      </div>
+      <Router>
+        <div className="App">
+          <Route path='/' exact render={() => {
+            if (!Auth.isAuthenticated()) {
+              return <Redirect from="/" to="login"/>
+            }
+            return <Home />;
+          }} />
+          <Route path='/login' component={Login} />
+          <Route path='/callback' component={Callback} />
+          </div>
+      </Router>
     );
   }
 }

@@ -20,7 +20,7 @@ class EditNote extends Component {
       createNote({
         variables: {title, description}
       });
-      this.setState({open: false});
+      this.setState({open: false, title: '', description: ''});
     }
 
     const form = (
