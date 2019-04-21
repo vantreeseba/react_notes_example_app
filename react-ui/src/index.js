@@ -14,9 +14,21 @@ import initial from './clientState/initial';
 
 const APP_URL = process.env.HEROKU_APP_NAME || 'localhost:3001';
 
+const authLink = (operation) => {
+  const token = localStorage.getItem('idToken');
+  const headers = {
+    headers: {
+      authorization: token ? `Bearer ${token}` : "",
+    }
+  };
+
+  operation.setContext(headers)
+};
+
 const cache = new InMemoryCache();
 const client = new ApolloClient({
   uri: `http://${APP_URL}/graphql`,
+  request: authLink,
   cache,
   resolvers,
 });
@@ -24,10 +36,7 @@ cache.writeData({
   data: initial
 });
 
-
-
 ReactDOM.render(
-
   <ApolloProvider client={client}>
     <App />
   </ApolloProvider>,

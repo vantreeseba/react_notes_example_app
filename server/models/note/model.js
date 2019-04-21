@@ -5,7 +5,9 @@ const schema = new Schema(
   {
     title: String,
     description: String,
-    archived: Boolean
+    archived: Boolean,
+    author: String,
+    sharedWith: [String]
   }, {
     timestamps: true
   }
