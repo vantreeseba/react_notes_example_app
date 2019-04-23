@@ -11,9 +11,9 @@ typeComposer.addResolver({
   resolve: async ({args}) => {
     return {
       recordId: args._id,
-      record: model.findByIdAndUpdate(args._id, {$set: {archived: true}})
+      record: await model.findByIdAndUpdate(args._id, {$set: {archived: true}})
     };
   }
-})
+});
 
 module.exports = typeComposer;

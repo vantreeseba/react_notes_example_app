@@ -2,7 +2,7 @@ import {graphql, compose} from "react-apollo";
 import React, {Component} from 'react';
 import {Modal, Form, Button} from 'semantic-ui-react';
 
-import CREATE_NOTE from '../../graphql/createNote';
+import CREATE_NOTE from '../../graphql/mutations/createNote';
 
 class EditNote extends Component {
   state = {

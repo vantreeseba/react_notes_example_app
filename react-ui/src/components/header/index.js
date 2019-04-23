@@ -6,9 +6,9 @@ import {withRouter} from 'react-router-dom';
 import EditNoteModal from '../editnotemodal';
 import Auth from '../../services/auth';
 
-import GET_SHOW_ARCHIVED from '../../graphql/getShowArchived';
-import TOGGLE_SHOW_ARCHIVED from '../../graphql/toggleShowArchived';
-import GET_NOTES from '../../graphql/getNotes';
+import GET_SHOW_ARCHIVED from '../../graphql/queries/getShowArchived';
+import TOGGLE_SHOW_ARCHIVED from '../../graphql/mutations/toggleShowArchived';
+import GET_NOTES from '../../graphql/queries/getNotes';
 
 class HeaderBarMenu extends Component {
   render() {

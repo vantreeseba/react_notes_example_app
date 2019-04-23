@@ -1,36 +1,35 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import {ApolloProvider} from 'react-apollo';
+import ApolloClient from 'apollo-client';
+import {InMemoryCache} from 'apollo-cache-inmemory';
+import {SubscriptionClient} from 'subscriptions-transport-ws';
+import {WebSocketLink} from "apollo-link-ws";
 
+import auth from './services/auth';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-
-import {ApolloProvider} from 'react-apollo';
-import ApolloClient from 'apollo-boost';
-import {InMemoryCache} from 'apollo-boost';
-
-
 import resolvers from './clientState/resolvers';
 import initial from './clientState/initial';
 
 const APP_URL = process.env.HEROKU_APP_NAME || 'localhost:3001';
 
-const authLink = (operation) => {
-  const token = localStorage.getItem('idToken');
-  const headers = {
-    headers: {
-      authorization: token ? `Bearer ${token}` : "",
+const subclient = new SubscriptionClient(`ws://${APP_URL}/graphql`, {
+  reconnect: true,
+  connectionParams: () => {
+    return {
+      token: auth.idToken 
     }
-  };
-
-  operation.setContext(headers)
-};
+  }
+});
 
 const cache = new InMemoryCache();
 const client = new ApolloClient({
-  uri: `http://${APP_URL}/graphql`,
-  request: authLink,
+  networkInterface: subclient,
   cache,
   resolvers,
+  connectToDevTools: true,
+  link: new WebSocketLink(subclient)
 });
 cache.writeData({
   data: initial

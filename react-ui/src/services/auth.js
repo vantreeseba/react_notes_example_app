@@ -17,6 +17,7 @@ class Auth {
     //   responseType: 'token id_token',
     //   scope: 'openid profile email'
     // });
+    
 
     this.readFromLocalStorage();
   }

@@ -1,8 +1,13 @@
 const mongoose = require('mongoose');
+const http = require('http');
 const {ApolloServer} = require('apollo-server-express');
-const schema = require('./schema');
+const {SubscriptionServer} = require('subscriptions-transport-ws');
+const {execute, subscribe} = require('graphql');
 const express = require('express');
 const path = require('path');
+
+const schema = require('./schema');
+const auth = require('./auth');
 
 const app = express();
 const PORT = process.env.PORT;
@@ -20,11 +25,36 @@ db.once('open', () => {
   const server = new ApolloServer({
     schema,
     introspection: true,
-    playground: true,
+    playground: {
+      endpointURL: '/graphql',
+      subscriptionsEndpoint: `ws://localhost:${PORT}/graphql`
+    },
   });
+
   server.applyMiddleware({app}); // app is from an existing express app
 
-  app.listen({port: PORT}, () =>
-    console.log(`Server ready at http://localhost:${PORT}${server.graphqlPath}`)
+  const httpServer = http.createServer(app);
+
+  SubscriptionServer.create(
+    {
+      schema,
+      execute,
+      subscribe,
+      onConnect: (connectionParams) => {
+        if (connectionParams.token) {
+          return {
+            user: auth.getUserFromToken(connectionParams.token)
+          };
+        }
+      },
+    },
+    {
+      server: httpServer,
+      path: '/graphql'
+    }
+  );
+
+  httpServer.listen(PORT, () =>
+    console.log(`Server ready at http://localhost:${PORT}/graphql`)
   );
 });

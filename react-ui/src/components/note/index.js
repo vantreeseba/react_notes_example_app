@@ -3,8 +3,8 @@ import React, {Component} from 'react';
 import {Confirm, Card, Icon} from 'semantic-ui-react';
 import TimeAgo from 'react-timeago';
 
-import ARCHIVE_NOTE from '../../graphql/archiveNote';
-import DELETE_NOTE from '../../graphql/deleteNote';
+import ARCHIVE_NOTE from '../../graphql/mutations/archiveNote';
+import DELETE_NOTE from '../../graphql/mutations/deleteNote';
 
 class Note extends Component {
   state = {
@@ -56,17 +56,9 @@ class Note extends Component {
 
 const wrapWithArchive = graphql(ARCHIVE_NOTE, {
   name: 'archiveNote',
-  options: {
-    refetchQueries: ['GET_NOTES'],
-    awaitRefetchQueries: true
-  }
 });
 const WrapWithDelete = graphql(DELETE_NOTE, {
   name: 'deleteNote',
-  options: {
-    refetchQueries: ['GET_NOTES'],
-    awaitRefetchQueries: true
-  }
 });
 
 export default compose(wrapWithArchive, WrapWithDelete)(Note);
