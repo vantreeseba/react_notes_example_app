@@ -13,9 +13,9 @@ import resolvers from './clientState/resolvers';
 import initial from './clientState/initial';
 import cacheRedirects from './clientState/redirects';
 
-const APP_URL = process.env.REACT_APP_URL;
+const WS_URL = process.env.REACT_APP_URL;
 
-const subclient = new SubscriptionClient(`ws://${APP_URL}/graphql`, {
+const subclient = new SubscriptionClient(WS_URL, {
   reconnect: true,
   connectionParams: () => {
     return {
