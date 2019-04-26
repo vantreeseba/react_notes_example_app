@@ -6,6 +6,7 @@
     "start": "node server",
     "start:ui": "cd react-ui && npm run start",
     "start:server": "cd server && npm run start",
+    "dev": "npm run start:ui & npm run dev:server",
     "dev:server": "cd server && docker-compose up",
     "build": "npm run build:ui && npm run build:server",
     "build:ui": "cd react-ui/ && npm install && npm install --only=dev --no-shrinkwrap && npm run build",

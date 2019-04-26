@@ -1,8 +1,8 @@
 import {createBrowserHistory} from 'history'
 import auth0 from 'auth0-js';
-const CALLBACK_URI = '';
-const AUTH0_CLIENT_ID = '';
-const AUTH0_DOMAIN = '';
+const CALLBACK_URI = process.env.REACT_APP_CALLBACK_URI;
+const AUTH0_CLIENT_ID = process.env.REACT_APP_AUTH0_CLIENT_ID;
+const AUTH0_DOMAIN = process.env.REACT_APP_AUTH0_DOMAIN;
 
 class Auth {
   accessToken;
@@ -10,15 +10,14 @@ class Auth {
   expiresAt;
   isLoggedIn;
   constructor() {
-    // this.auth0 = new auth0.WebAuth({
-    //   domain: AUTH0_DOMAIN,
-    //   clientID: AUTH0_CLIENT_ID,
-    //   redirectUri: CALLBACK_URI,
-    //   responseType: 'token id_token',
-    //   scope: 'openid profile email'
-    // });
+    this.auth0 = new auth0.WebAuth({
+      domain: AUTH0_DOMAIN,
+      clientID: AUTH0_CLIENT_ID,
+      redirectUri: CALLBACK_URI,
+      responseType: 'token id_token',
+      scope: 'openid profile email'
+    });
     
-
     this.readFromLocalStorage();
   }
 
