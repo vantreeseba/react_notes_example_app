@@ -22,6 +22,16 @@ db.on('error', (err) => console.error('connection error:', err));
 db.once('open', () => {
   app.use(express.static(path.resolve(__dirname, '../react-ui/build')));
 
+  //Redirect everything to react ui
+  app.use((req, res, next) => {
+    if (req.originalUrl.includes('/graphql')) {
+      return next();
+    }
+
+    req.url = '/';
+    return next();
+  })
+
   const server = new ApolloServer({
     schema,
     introspection: true,
