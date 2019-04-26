@@ -1,7 +1,7 @@
 /**
  * A resolver wrapper that filters results to only the logged in user.
- *
  * @param {Object} resolvers A list of resolvers.
+ * @return {Array} The modified resolvers.
  */
 function limitToUser(resolvers) {
   Object.keys(resolvers).forEach((k) => {

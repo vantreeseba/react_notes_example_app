@@ -8,6 +8,7 @@ const path = require('path');
 
 const schema = require('./schema');
 const auth = require('./auth');
+const permissions = require('./permissions');
 
 const app = express();
 const PORT = process.env.PORT;
@@ -20,7 +21,6 @@ const db = mongoose.connection;
 db.on('error', (err) => console.error('connection error:', err));
 
 db.once('open', () => {
-
   app.use(express.static(path.resolve(__dirname, '../react-ui/build')));
 
   app.use('*', (req, res) => {
@@ -28,6 +28,7 @@ db.once('open', () => {
   });
 
   const server = new ApolloServer({
+    // schema: permissions(schema),
     schema,
     introspection: true,
     playground: {
@@ -42,6 +43,7 @@ db.once('open', () => {
 
   SubscriptionServer.create(
     {
+      // schema: permissions(schema),
       schema,
       execute,
       subscribe,
@@ -61,5 +63,5 @@ db.once('open', () => {
 
   httpServer.listen(PORT, () =>
     console.log(`Server ready at http://localhost:${PORT}/graphql`)
-);
+  );
 });
