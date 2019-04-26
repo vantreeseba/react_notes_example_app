@@ -20,8 +20,9 @@ function limitToUser(resolvers) {
           }]
         }]
       };
+      
 
-      if (rp.args.filter.AND) {
+      if (rp.args.filter && rp.args.filter.AND) {
         rp.args.filter.AND = {...rp.args.filter.AND, ...userFilter};
       } else {
         rp.args.filter = {...rp.args.filter, ...userFilter};

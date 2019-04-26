@@ -1,19 +1,11 @@
 import gql from 'graphql-tag';
+import Note from '../fragments/note';
 
 const GET_NOTE = gql` 
-  fragment Note on Note {
-    _id
-    title
-    description
-    archived
-    createdAt
-    updatedAt
-  }
+  ${Note}
 
-  query GET_NOTE ($_id: MongoID){
-    notes: noteById(_id: $_id) {
-      ...Note
-    }
+  query GET_NOTE ($_id: MongoID!){
+    note: noteById(_id: $_id) { ...Note }
   }
 `;
 

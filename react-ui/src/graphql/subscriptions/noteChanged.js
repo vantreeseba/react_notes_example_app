@@ -1,19 +1,11 @@
 import gql from 'graphql-tag';
+import Note from '../fragments/note';
 
 const NOTE_CHANGED = gql` 
-  fragment Note on Note {
-    _id
-    title
-    description
-    archived
-    createdAt
-    updatedAt
-  }
+  ${Note}
 
   subscription noteChanged {
-    note: note_changed {
-      ...Note
-    }
+    note: note_changed {...Note}
   }
 `;
 

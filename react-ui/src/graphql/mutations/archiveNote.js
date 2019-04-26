@@ -1,17 +1,11 @@
 import gql from 'graphql-tag';
+import Note from '../fragments/note';
 
 const ARCHIVE_NOTE = gql` 
-  fragment Note on Note {
-    _id
-    title
-    description
-    archived
-    createdAt
-    updatedAt
-  }
+  ${Note}
 
-  mutation ArchiveNote($_id: MongoID!) {
-    noteSetArchived(_id: $_id) {
+  mutation ArchiveNote($_id: MongoID!, $archived: Boolean) {
+    noteSetArchived(_id: $_id, archived: $archived) {
       recordId
       record {
         ...Note

@@ -11,6 +11,7 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import resolvers from './clientState/resolvers';
 import initial from './clientState/initial';
+import cacheRedirects from './clientState/redirects';
 
 const APP_URL = process.env.HEROKU_APP_NAME || 'localhost:3001';
 
@@ -23,7 +24,11 @@ const subclient = new SubscriptionClient(`ws://${APP_URL}/graphql`, {
   }
 });
 
-const cache = new InMemoryCache();
+const cache = new InMemoryCache({
+  cacheRedirects,
+  dataIdFromObject: ({_id}) => _id,
+  // addTypename: false
+});
 const client = new ApolloClient({
   networkInterface: subclient,
   cache,

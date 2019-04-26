@@ -8,6 +8,8 @@ export default {
           showArchived
         }
       });
+
+      return {showArchived, __typename: 'showArchived'};
     }
   }
 };

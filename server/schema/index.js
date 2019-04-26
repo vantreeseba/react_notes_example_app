@@ -51,7 +51,8 @@ schemaComposer.Mutation.addFields({
   ...saveAsUser(
     publishMessage(NOTE_CHANGED_TOPIC, {
       ...addDefaultMutations('note', NoteTC),
-      'noteSetArchived': NoteTC.getResolver('noteSetArchived')
+      'noteSetArchived': NoteTC.getResolver('noteSetArchived'),
+      'noteSetSharedWith': NoteTC.getResolver('noteSetSharedWith')
     })
   )
 });
@@ -65,7 +66,21 @@ schemaComposer.Subscription.addFields({
     subscribe: withFilter(
       () => pubsub.asyncIterator(NOTE_CHANGED_TOPIC),
       (payload, variables, context) => {
-        return payload.value.author === context.user || payload.value.sharedWith.includes(context.user)
+        let sharedWith = false;
+        let isAuthor = false;
+        if (payload.args && payload.args.sharedWith) {
+          sharedWith = payload.args.sharedWith.includes(context.user);
+        }
+
+        if(payload.value.sharedWith) {
+          sharedWith = sharedWith || payload.value.sharedWith.includes(context.user);
+        }
+
+        if(payload.value.author) {
+          isAuthor = payload.value.author === context.user;
+        }
+
+        return isAuthor || sharedWith 
       }
     )
   }

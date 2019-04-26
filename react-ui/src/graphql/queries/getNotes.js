@@ -1,14 +1,8 @@
 import gql from 'graphql-tag';
+import Note from '../fragments/note';
 
-const GET_NOTES = gql` 
-  fragment Note on Note {
-    _id
-    title
-    description
-    archived
-    createdAt
-    updatedAt
-  }
+const GET_NOTES = gql`
+  ${Note}
 
   query GET_NOTES ($showArchived: Boolean){
     notes: noteMany(filter: { 

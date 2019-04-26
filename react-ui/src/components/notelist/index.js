@@ -9,6 +9,7 @@ import GET_SHOW_ARCHIVED from '../../graphql/queries/getShowArchived';
 import GET_NOTES from '../../graphql/queries/getNotes';
 import NOTE_CHANGED from '../../graphql/subscriptions/noteChanged';
 
+
 class NoteList extends Component {
   render() {
     const {getNotes} = this.props;
@@ -34,7 +35,7 @@ const wrapWithGetNotes = graphql(GET_NOTES, {
       variables: {showArchived}
     }
   }
-})
+});
 const wrapWithNoteUpdateSubscription = graphql(NOTE_CHANGED, {
   name: 'noteChanged',
   options: props => {
@@ -46,7 +47,6 @@ const wrapWithNoteUpdateSubscription = graphql(NOTE_CHANGED, {
         //
         // (The note itself is updated, but apollo cannot update the query with a filter, so we
         // must do it.)
-        console.log('got subscription');
         props.getNotes.refetch();
 
         // let note = subscriptionData.data.note; 

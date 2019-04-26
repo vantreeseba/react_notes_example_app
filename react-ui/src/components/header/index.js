@@ -14,7 +14,7 @@ class HeaderBarMenu extends Component {
   render() {
     const {showArchived, toggleArchive} = this.props;
 
-    if(showArchived.loading || toggleArchive.loading) {
+    if (showArchived.loading || toggleArchive.loading) {
       return null;
     }
 
@@ -53,15 +53,17 @@ class HeaderBarMenu extends Component {
 const wrapWithShowArchive = graphql(GET_SHOW_ARCHIVED, {name: 'showArchived'});
 const WrapWithToggleArchive = graphql(TOGGLE_SHOW_ARCHIVED, {
   name: 'toggleArchive',
-  options: props => ({
-    refetchQueries: [{
-      query: GET_NOTES,
-      variables: {
-        showArchived: props.showArchived.showArchived
-      }
-    }],
+  options: {
+    refetchQueries: ({data}) => {
+      return [{
+        query: GET_NOTES,
+        variables: {
+          showArchived: data.showArchived.showArchived
+        }
+      }]
+    },
     awaitRefetchQueries: true
-  })
+  }
 });
 
 export default compose(wrapWithShowArchive, WrapWithToggleArchive, withRouter)(HeaderBarMenu);

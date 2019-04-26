@@ -1,6 +1,9 @@
 import gql from 'graphql-tag';
+import Note from '../fragments/note';
 
 const CREATE_NOTE = gql` 
+  ${Note}
+
   mutation CreateNote(
     $title: String,
     $description: String
@@ -13,12 +16,7 @@ const CREATE_NOTE = gql`
     }) {
       recordId
       record {
-        _id
-        title
-        description
-        archived
-        createdAt
-        updatedAt
+        ...Note
       }
     }
   }
