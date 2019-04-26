@@ -23,13 +23,8 @@ db.once('open', () => {
 
   app.use(express.static(path.resolve(__dirname, '../react-ui/build')));
 
-  app.use((req, res, next) => {
-    if (req.originalUrl.includes('/graphql')) {
-      return next();
-    }
-
-    // Redirect everything to react ui.
-    res.sendFile(path.resolve(__dirname, '../react-ui/build'));
+  app.use('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, '../react-ui/build', 'index.html'));
   });
 
   const server = new ApolloServer({
@@ -66,5 +61,5 @@ db.once('open', () => {
 
   httpServer.listen(PORT, () =>
     console.log(`Server ready at http://localhost:${PORT}/graphql`)
-  );
+);
 });
