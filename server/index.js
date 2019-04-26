@@ -20,7 +20,6 @@ const db = mongoose.connection;
 db.on('error', (err) => console.error('connection error:', err));
 
 db.once('open', () => {
-  app.use(express.static(path.resolve(__dirname, '../react-ui/build')));
 
   //Redirect everything to react ui
   app.use((req, res, next) => {
@@ -30,7 +29,9 @@ db.once('open', () => {
 
     req.url = '/';
     return next();
-  })
+  });
+
+  app.use(express.static(path.resolve(__dirname, '../react-ui/build')));
 
   const server = new ApolloServer({
     schema,
