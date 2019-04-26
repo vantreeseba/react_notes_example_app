@@ -10,7 +10,10 @@
     "dev:server": "cd server && docker-compose up",
     "build": "npm run build:ui && npm run build:server",
     "build:ui": "cd react-ui/ && npm install && npm install --only=dev --no-shrinkwrap && npm run build",
-    "build:server": "cd server && npm install"
+    "build:server": "cd server && npm install",
+    "install": "npm run install:ui && npm run install:server",
+    "install:ui": "cd react-ui && npm install",
+    "install:server": "cd server && npm install"
   },
   "cacheDirectories": [
     "node_modules",
