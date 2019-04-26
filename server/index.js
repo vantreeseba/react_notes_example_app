@@ -8,6 +8,7 @@ const path = require('path');
 
 const schema = require('./schema');
 const auth = require('./auth');
+const {applyMiddleware} = require('graphql-middleware');
 const permissions = require('./permissions');
 
 const app = express();
@@ -23,13 +24,18 @@ db.on('error', (err) => console.error('connection error:', err));
 db.once('open', () => {
   app.use(express.static(path.resolve(__dirname, '../react-ui/build')));
 
-  app.use('*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, '../react-ui/build', 'index.html'));
+  app.use('*', (req, res, next) => {
+    if(!req.url === '/graphql') {
+      return res.sendFile(path.resolve(__dirname, '../react-ui/build', 'index.html'));
+    }
+    return next();
   });
 
+  let permissionedSchema = applyMiddleware(schema, permissions); 
+
   const server = new ApolloServer({
-    // schema: permissions(schema),
-    schema,
+    schema: permissionedSchema,
+    // schema,
     introspection: true,
     playground: {
       endpointURL: '/graphql',
@@ -43,13 +49,14 @@ db.once('open', () => {
 
   SubscriptionServer.create(
     {
-      // schema: permissions(schema),
-      schema,
+      schema: permissionedSchema,
+      // schema,
       execute,
       subscribe,
       onConnect: (connectionParams) => {
         if (connectionParams.token) {
           return {
+            db,
             user: auth.getUserFromToken(connectionParams.token)
           };
         }

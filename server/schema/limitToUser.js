@@ -6,11 +6,6 @@
 function limitToUser(resolvers) {
   Object.keys(resolvers).forEach((k) => {
     resolvers[k] = resolvers[k].wrapResolve(next => (rp) => {
-      if (!rp.context.user) {
-        // throw new Error('Must be logged in to access this action.');
-        return next(rp);
-      }
-
       const userFilter = {
         AND: [{
           OR: [{

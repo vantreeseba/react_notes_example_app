@@ -1,24 +1,35 @@
-const {applyMiddleware} = require('graphql-middleware');
-const {rule, allow, deny, shield} = require('graphql-shield');
+const {rule, allow, deny, and, shield} = require('graphql-shield');
 
-// const loggedIn = rule({cache: 'contextual'})(
-//   (parent, args, ctx, info) => {
-//     return true;
-//   }
-// )
+const loggedIn = rule({cache: 'contextual'})(
+  async (parent, args, ctx, info) => {
+    return ctx.user !== undefined;
+  }
+);
 
-const permissions = shield({
-  Query: {
-    '*': allow,
-    'noteMany': allow
-  },
-  Mutation: {
-    '*': deny
-  },
-}, {
-  fallbackRule: deny
+const isItemOwner = rule({
+  cache: 'contextual',
+})(async (parent, {_id}, ctx, info) => {
+  const type = info.returnType.getFields().record.type;
+  const model = ctx.db.models[type];
+  const user = ctx.user;
+
+  return await model.findOne({_id, author: user}) !== null;
 });
 
-module.exports = (schema) => {
-  return applyMiddleware(schema, permissions);
-};
+module.exports = shield({
+  Query: {
+    '*': loggedIn
+  },
+  Mutation: {
+    'noteCreateOne': loggedIn,
+    '*': isItemOwner
+  },
+  Subscription: {
+    '*': loggedIn
+  }
+});
+
+// , {
+// TODO: Figure out why this is applied to field within a query? (i.e. note.title).
+// fallbackRule: deny
+// });

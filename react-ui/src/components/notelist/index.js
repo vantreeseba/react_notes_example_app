@@ -49,6 +49,8 @@ const wrapWithNoteUpdateSubscription = graphql(NOTE_CHANGED, {
         // must do it.)
         props.getNotes.refetch();
 
+        console.log('got that subscription');
+
         // let note = subscriptionData.data.note; 
         // if(note.archived) {
         //   const query = {query: GET_NOTES, variables: {showArchived: false}};

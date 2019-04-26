@@ -3,7 +3,6 @@ const {schemaComposer} = require('graphql-compose');
 const NoteTC = require('../models/note/tc');
 const {pubsub, NOTE_CHANGED_TOPIC} = require('../pubsub');
 
-const loggedIn = require('./loggedIn');
 const limitToUser = require('./limitToUser');
 const saveAsUser = require('./saveAsUser');
 const publishMessage = require('./publishMessage');
@@ -38,10 +37,8 @@ const addDefaultMutations = (type, TC) => {
 
 schemaComposer.Query.addFields(
   {
-    ...loggedIn(
-      limitToUser(
-        buildDefaultQueries('note', NoteTC)
-      )
+    ...limitToUser(
+      buildDefaultQueries('note', NoteTC)
     )
   }
 );
@@ -72,15 +69,15 @@ schemaComposer.Subscription.addFields({
           sharedWith = payload.args.sharedWith.includes(context.user);
         }
 
-        if(payload.value.sharedWith) {
+        if (payload.value.sharedWith) {
           sharedWith = sharedWith || payload.value.sharedWith.includes(context.user);
         }
 
-        if(payload.value.author) {
+        if (payload.value.author) {
           isAuthor = payload.value.author === context.user;
         }
 
-        return isAuthor || sharedWith 
+        return isAuthor || sharedWith
       }
     )
   }
