@@ -22,16 +22,7 @@ const db = mongoose.connection;
 db.on('error', (err) => console.error('connection error:', err));
 
 db.once('open', () => {
-  app.use(express.static(path.resolve(__dirname, '../react-ui/build')));
-
-  app.use('*', (req, res, next) => {
-    if(!req.url === '/graphql') {
-      return res.sendFile(path.resolve(__dirname, '../react-ui/build', 'index.html'));
-    }
-    return next();
-  });
-
-  let permissionedSchema = applyMiddleware(schema, permissions); 
+  let permissionedSchema = applyMiddleware(schema, permissions);
 
   const server = new ApolloServer({
     schema: permissionedSchema,
@@ -43,8 +34,16 @@ db.once('open', () => {
     },
   });
 
-  server.applyMiddleware({app}); // app is from an existing express app
+  app.use(express.static(path.resolve(__dirname, '../react-ui/build')));
 
+  app.use('*', (req, res, next) => {
+    if(req.url !== '/graphql') {
+      return res.sendFile(path.resolve(__dirname, '../react-ui/build', 'index.html'));
+    }
+    return next();
+  });
+
+  server.applyMiddleware({app}); // app is from an existing express app
   const httpServer = http.createServer(app);
 
   SubscriptionServer.create(
